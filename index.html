@@ -39,8 +39,6 @@
       --hh: 68px;
     }
 
-    @keyframes float    { from{transform:translateY(-10px)} to{transform:translateY(10px)} }
-    @keyframes twinkle  { 0%,100%{opacity:.12;transform:scale(.7)} 50%{opacity:.85;transform:scale(1.2)} }
     @keyframes badgePop { 0%{transform:scale(0)} 65%{transform:scale(1.35)} 100%{transform:scale(1)} }
     @keyframes fadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     @keyframes slideIn  { from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)} }
@@ -113,7 +111,7 @@
     #hero {
       margin-top: var(--hh);
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       min-height: calc(100svh - var(--hh));
       position: relative;
     }
@@ -124,12 +122,6 @@
       object-fit: cover;
       object-position: center;
       z-index: 0;
-    }
-    .hero-bg-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(253,246,243,.58);
-      z-index: 1;
     }
     .hero-text {
       background: transparent;
@@ -171,24 +163,6 @@
       color:var(--text-light); letter-spacing:.06em;
       display:flex; align-items:center; gap:7px;
     }
-    .hero-visual {
-      background: transparent;
-      display:flex; align-items:center; justify-content:center;
-      position:relative; z-index:2; overflow:hidden;
-    }
-    .hero-blob {
-      position:absolute; width:440px; height:440px;
-      background:rgba(232,197,184,.42);
-      border-radius:62% 38% 58% 42% / 48% 56% 44% 52%;
-      filter:blur(12px);
-    }
-    .duck-wrap { position:relative; z-index:2; animation:float 4.5s ease-in-out infinite alternate; }
-    .sparkle { position:absolute; color:var(--accent); z-index:3; line-height:1; animation:twinkle 3.5s ease-in-out infinite; }
-    .sp1{top:18%;left:12%;font-size:12px;animation-delay:0s}
-    .sp2{top:12%;right:16%;font-size:18px;animation-delay:.8s}
-    .sp3{bottom:20%;left:9%;font-size:9px;animation-delay:1.3s}
-    .sp4{bottom:16%;right:14%;font-size:14px;animation-delay:.5s}
-    .sp5{top:50%;left:6%;font-size:10px;animation-delay:1.9s}
 
     /* ── CATÁLOGO ─────────────────────────────────────────────── */
     #catalogo { padding: clamp(60px,8vw,104px) clamp(20px,5%,72px); }
@@ -430,8 +404,7 @@
 
     /* ── RESPONSIVE ──────────────────────────────────────────── */
     @media(max-width:960px) {
-      #hero { grid-template-columns:1fr; min-height:auto; }
-      .hero-visual { height:52vw; min-height:280px; max-height:420px; order:-1; }
+      #hero { min-height:auto; }
       .logo-tag { display:none; }
       nav { display:none; }
       .fg { grid-template-columns:1fr 1fr; gap:36px; }
@@ -479,7 +452,6 @@
 <!-- ═══ HERO ══════════════════════════════════════════════════ -->
 <section id="hero">
   <img class="hero-bg-img" src="./Imagenes/Fondo%20Principal.png" alt="" aria-hidden="true">
-  <div class="hero-bg-overlay"></div>
   <div class="hero-text">
     <span class="hero-eyebrow">Nueva colección</span>
     <h1 class="hero-h1">Realza<br>tu <em>esencia.</em></h1>
@@ -487,37 +459,6 @@
     <div class="hero-actions">
       <a href="#catalogo" class="btn-pill">Explorar colección</a>
       <span class="hero-note">✦ Envío gratis sobre $40.000</span>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="hero-blob"></div>
-    <span class="sparkle sp1">✦</span>
-    <span class="sparkle sp2">✦</span>
-    <span class="sparkle sp3">✦</span>
-    <span class="sparkle sp4">✦</span>
-    <span class="sparkle sp5">✦</span>
-    <div class="duck-wrap">
-      <svg width="260" height="260" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="bg1" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#FFE55A"/><stop offset="100%" stop-color="#F0C830"/></radialGradient>
-          <radialGradient id="wg1" cx="50%" cy="30%" r="60%"><stop offset="0%" stop-color="#E8C830"/><stop offset="100%" stop-color="#D4A820"/></radialGradient>
-        </defs>
-        <ellipse cx="140" cy="168" rx="88" ry="72" fill="url(#bg1)"/>
-        <path d="M80 175 Q68 150 82 132 Q106 118 124 138 Q112 168 80 175Z" fill="url(#wg1)" opacity=".9"/>
-        <ellipse cx="168" cy="108" rx="52" ry="50" fill="url(#bg1)"/>
-        <path d="M216 108 Q232 104 234 112 Q232 120 216 116 Q210 112 216 108Z" fill="#F0A050" stroke="#E09040" stroke-width="1"/>
-        <ellipse cx="152" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
-        <ellipse cx="188" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
-        <ellipse cx="175" cy="100" rx="16" ry="17" fill="white"/>
-        <ellipse cx="177" cy="102" rx="9" ry="10" fill="#1A0A06"/>
-        <circle cx="181" cy="97" r="3.5" fill="white"/>
-        <path d="M164 84 Q170 72 184 76" stroke="#2C1810" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <path d="M166 86 Q168 78 170 76" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <path d="M172 83 Q176 74 178 73" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <path d="M179 84 Q183 77 186 77" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <path d="M116 232 Q110 242 104 244 Q108 246 116 244 Q122 246 128 244 Q122 242 116 232Z" fill="#F0A050"/>
-        <path d="M164 236 Q158 246 152 248 Q156 250 164 248 Q170 250 176 248 Q170 246 164 236Z" fill="#F0A050"/>
-      </svg>
     </div>
   </div>
 </section>
