@@ -114,13 +114,14 @@
       grid-template-columns: 1fr;
       min-height: calc(100svh - var(--hh));
       position: relative;
+      overflow: hidden;
     }
     .hero-bg-img {
       position: absolute;
       inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
-      object-position: center;
+      object-position: 70% center;
       z-index: 0;
     }
     .hero-text {
@@ -131,21 +132,24 @@
       position: relative; z-index: 2;
     }
     .hero-eyebrow {
-      font-family:var(--font-body); font-weight:300; font-size:11px;
-      letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
+      font-family:var(--font-body); font-weight:400; font-size:11px;
+      letter-spacing:.22em; text-transform:uppercase; color:var(--chocolate);
       display:flex; align-items:center; gap:12px;
+      text-shadow:0 1px 4px rgba(255,255,255,.6);
     }
-    .hero-eyebrow::before { content:''; width:24px; height:1px; background:var(--accent); flex-shrink:0; }
+    .hero-eyebrow::before { content:''; width:24px; height:1px; background:var(--chocolate); flex-shrink:0; }
     .hero-h1 {
-      font-family:var(--font-display); font-weight:300;
+      font-family:var(--font-display); font-weight:400;
       font-size:clamp(52px,8vw,96px);
-      line-height:1.0; color:var(--text-dark); letter-spacing:-.01em;
+      line-height:1.0; color:#1A0A06; letter-spacing:-.01em;
+      text-shadow:0 1px 8px rgba(255,255,255,.5);
     }
-    .hero-h1 em { font-style:italic; color:var(--accent); }
+    .hero-h1 em { font-style:italic; color:var(--chocolate-dark); }
     .hero-p {
-      font-family:var(--font-body); font-weight:300;
-      font-size:clamp(15px,1.5vw,18px); color:var(--text-mid);
+      font-family:var(--font-body); font-weight:400;
+      font-size:clamp(15px,1.5vw,18px); color:#2C1810;
       line-height:1.8; max-width:380px;
+      text-shadow:0 1px 4px rgba(255,255,255,.55);
     }
     .hero-actions { display:flex; flex-direction:column; align-items:flex-start; gap:14px; }
     .btn-pill {
@@ -159,9 +163,10 @@
     }
     .btn-pill:hover { background:var(--chocolate-dark); transform:translateY(-1px); box-shadow:0 8px 24px rgba(125,90,80,.25); }
     .hero-note {
-      font-family:var(--font-body); font-weight:300; font-size:12px;
-      color:var(--text-light); letter-spacing:.06em;
+      font-family:var(--font-body); font-weight:400; font-size:12px;
+      color:#2C1810; letter-spacing:.06em;
       display:flex; align-items:center; gap:7px;
+      text-shadow:0 1px 4px rgba(255,255,255,.55);
     }
 
     /* ── CATÁLOGO ─────────────────────────────────────────────── */
