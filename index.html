@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Katemi — Maquillaje que realza tu esencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:        #E8C5B8;
+      --primary-soft:   #F2D9D0;
+      --chocolate:      #7D5A50;
+      --chocolate-dark: #5E4038;
+      --pink-pastel:    #F7E0DA;
+      --beige:          #F5EDE8;
+      --bg:             #FDF6F3;
+      --bg-card:        #FFFFFF;
+      --bg-cart:        #FFFAF8;
+      --text-dark:      #2C1810;
+      --text-mid:       #7D5A50;
+      --text-light:     #B89690;
+      --accent:         #C4897A;
+      --whatsapp:       #25d366;
+      --font-display:   'Cormorant Garamond', serif;
+      --font-body:      'Jost', sans-serif;
+      --r-sm:   8px;
+      --r-md:   16px;
+      --r-lg:   24px;
+      --r-full: 999px;
+      --sh-card:   0 2px 20px rgba(44,24,16,.06), 0 1px 3px rgba(44,24,16,.04);
+      --sh-hover:  0 16px 48px rgba(196,137,122,.22), 0 4px 12px rgba(44,24,16,.06);
+      --sh-cart:  -8px 0 64px rgba(44,24,16,.13);
+      --ease:     cubic-bezier(.4,0,.2,1);
+      --ease-out: cubic-bezier(0,.55,.45,1);
+      --hh: 68px;
+    }
+
+    @keyframes float    { from{transform:translateY(-10px)} to{transform:translateY(10px)} }
+    @keyframes twinkle  { 0%,100%{opacity:.12;transform:scale(.7)} 50%{opacity:.85;transform:scale(1.2)} }
+    @keyframes badgePop { 0%{transform:scale(0)} 65%{transform:scale(1.35)} 100%{transform:scale(1)} }
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes slideIn  { from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes pulse    { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 15px;
+      background: var(--bg);
+      color: var(--text-dark);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────────── */
+    header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--hh);
+      z-index: 100;
+      background: rgba(253,246,243,.93);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(232,197,184,.22);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px,5%,72px);
+    }
+    .logo-wrap { display:flex; flex-direction:column; gap:1px; text-decoration:none; user-select:none; }
+    .logo-name  { font-family:var(--font-display); font-weight:600; font-size:clamp(22px,3.5vw,34px); color:var(--text-dark); line-height:1; letter-spacing:.03em; }
+    .logo-tag   { font-family:var(--font-body); font-weight:300; font-size:10px; color:var(--text-light); letter-spacing:.18em; text-transform:uppercase; }
+    nav { display:flex; gap:36px; }
+    nav a {
+      font-family:var(--font-body); font-weight:400; font-size:12px;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--text-mid);
+      text-decoration:none; position:relative; padding-bottom:3px;
+      transition:color .25s ease;
+    }
+    nav a::after {
+      content:''; position:absolute; bottom:0; left:50%; right:50%;
+      height:1px; background:var(--accent);
+      transition:left .3s ease, right .3s ease;
+    }
+    nav a:hover { color:var(--text-dark); }
+    nav a:hover::after { left:0; right:0; }
+
+    .cart-btn {
+      position:relative; background:none; border:none; cursor:pointer;
+      padding:8px; color:var(--chocolate);
+      transition:color .2s ease, transform .2s ease;
+      display:flex; align-items:center;
+    }
+    .cart-btn:hover { transform:scale(1.06); color:var(--text-dark); }
+    .cart-badge {
+      position:absolute; top:2px; right:2px;
+      min-width:18px; height:18px; padding:0 4px;
+      background:var(--accent); color:#fff;
+      font-family:var(--font-body); font-size:10px; font-weight:500;
+      border-radius:var(--r-full);
+      display:grid; place-items:center;
+      transform:scale(0); opacity:0;
+      transition:transform .2s var(--ease-out), opacity .2s ease;
+    }
+    .cart-badge.on { transform:scale(1); opacity:1; animation:badgePop .38s var(--ease-out); }
+
+    /* ── HERO ──────────────────────────────────────────────────── */
+    #hero {
+      margin-top: var(--hh);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100svh - var(--hh));
+      position: relative;
+    }
+    .hero-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+    }
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(253,246,243,.58);
+      z-index: 1;
+    }
+    .hero-text {
+      background: transparent;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(48px,8vw,100px) clamp(28px,6vw,80px);
+      gap: 26px;
+      position: relative; z-index: 2;
+    }
+    .hero-eyebrow {
+      font-family:var(--font-body); font-weight:300; font-size:11px;
+      letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
+      display:flex; align-items:center; gap:12px;
+    }
+    .hero-eyebrow::before { content:''; width:24px; height:1px; background:var(--accent); flex-shrink:0; }
+    .hero-h1 {
+      font-family:var(--font-display); font-weight:300;
+      font-size:clamp(52px,8vw,96px);
+      line-height:1.0; color:var(--text-dark); letter-spacing:-.01em;
+    }
+    .hero-h1 em { font-style:italic; color:var(--accent); }
+    .hero-p {
+      font-family:var(--font-body); font-weight:300;
+      font-size:clamp(15px,1.5vw,18px); color:var(--text-mid);
+      line-height:1.8; max-width:380px;
+    }
+    .hero-actions { display:flex; flex-direction:column; align-items:flex-start; gap:14px; }
+    .btn-pill {
+      display:inline-flex; align-items:center; gap:10px;
+      font-family:var(--font-body); font-weight:500; font-size:12px;
+      letter-spacing:.1em; text-transform:uppercase;
+      color:#fff; background:var(--chocolate); border:none;
+      border-radius:var(--r-full); padding:15px 36px;
+      cursor:pointer; text-decoration:none;
+      transition:background .35s var(--ease), transform .2s ease, box-shadow .3s ease;
+    }
+    .btn-pill:hover { background:var(--chocolate-dark); transform:translateY(-1px); box-shadow:0 8px 24px rgba(125,90,80,.25); }
+    .hero-note {
+      font-family:var(--font-body); font-weight:300; font-size:12px;
+      color:var(--text-light); letter-spacing:.06em;
+      display:flex; align-items:center; gap:7px;
+    }
+    .hero-visual {
+      background: transparent;
+      display:flex; align-items:center; justify-content:center;
+      position:relative; z-index:2; overflow:hidden;
+    }
+    .hero-blob {
+      position:absolute; width:440px; height:440px;
+      background:rgba(232,197,184,.42);
+      border-radius:62% 38% 58% 42% / 48% 56% 44% 52%;
+      filter:blur(12px);
+    }
+    .duck-wrap { position:relative; z-index:2; animation:float 4.5s ease-in-out infinite alternate; }
+    .sparkle { position:absolute; color:var(--accent); z-index:3; line-height:1; animation:twinkle 3.5s ease-in-out infinite; }
+    .sp1{top:18%;left:12%;font-size:12px;animation-delay:0s}
+    .sp2{top:12%;right:16%;font-size:18px;animation-delay:.8s}
+    .sp3{bottom:20%;left:9%;font-size:9px;animation-delay:1.3s}
+    .sp4{bottom:16%;right:14%;font-size:14px;animation-delay:.5s}
+    .sp5{top:50%;left:6%;font-size:10px;animation-delay:1.9s}
+
+    /* ── CATÁLOGO ─────────────────────────────────────────────── */
+    #catalogo { padding: clamp(60px,8vw,104px) clamp(20px,5%,72px); }
+    .sec-head { text-align:center; margin-bottom:48px; }
+    .sec-title {
+      font-family:var(--font-display); font-weight:400;
+      font-size:clamp(30px,4.5vw,54px); color:var(--text-dark);
+      line-height:1.1; margin-bottom:10px;
+    }
+    .sec-title em { font-style:italic; color:var(--accent); }
+    .sec-sub { font-family:var(--font-body); font-weight:300; font-size:15px; color:var(--text-mid); }
+
+    .filtros {
+      display:flex; gap:8px; justify-content:center;
+      margin-bottom:48px; overflow-x:auto;
+      -ms-overflow-style:none; scrollbar-width:none; padding:4px 0;
+    }
+    .filtros::-webkit-scrollbar { display:none; }
+    .f-btn {
+      flex-shrink:0;
+      font-family:var(--font-body); font-weight:400; font-size:11.5px;
+      letter-spacing:.1em; text-transform:uppercase; color:var(--text-mid);
+      background:transparent; border:1.5px solid rgba(196,137,122,.25);
+      border-radius:var(--r-full); padding:10px 24px; cursor:pointer;
+      transition:background .22s ease, color .22s ease, border-color .22s ease, transform .15s ease;
+    }
+    .f-btn:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-1px); }
+    .f-btn.active { background:var(--chocolate); color:#fff; border-color:var(--chocolate); }
+
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:24px; }
+
+    /* Card */
+    .card {
+      background:var(--bg-card); border-radius:var(--r-lg);
+      box-shadow:var(--sh-card); overflow:hidden;
+      transition:transform .32s var(--ease), box-shadow .32s var(--ease), border-color .25s ease;
+      opacity:0; animation:fadeUp .5s ease forwards;
+      border:1.5px solid transparent;
+    }
+    .card:hover { transform:translateY(-5px); box-shadow:var(--sh-hover); }
+    .card.in-cart { border-color:rgba(232,197,184,.55); }
+    .card-img {
+      aspect-ratio:3/4; overflow:hidden;
+      background:linear-gradient(150deg,var(--pink-pastel) 0%,var(--primary) 100%);
+      position:relative;
+    }
+    .card-img img {
+      width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform .55s var(--ease);
+    }
+    .card:hover .card-img img { transform:scale(1.05); }
+    .card-in-badge {
+      position:absolute; top:10px; right:10px;
+      background:rgba(253,246,243,.92); backdrop-filter:blur(6px);
+      border:1px solid rgba(232,197,184,.5);
+      border-radius:var(--r-full); padding:4px 11px;
+      font-family:var(--font-body); font-weight:400; font-size:10px;
+      letter-spacing:.08em; text-transform:uppercase; color:var(--chocolate);
+      opacity:0; transform:scale(.8) translateY(-6px);
+      transition:opacity .25s ease, transform .28s var(--ease-out);
+      pointer-events:none;
+    }
+    .card.in-cart .card-in-badge { opacity:1; transform:scale(1) translateY(0); }
+    .card-body { padding:18px 20px 20px; }
+    .card-cat  { font-family:var(--font-body); font-weight:300; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-light); margin-bottom:5px; }
+    .card-name { font-family:var(--font-display); font-weight:600; font-size:clamp(16px,1.8vw,20px); color:var(--text-dark); line-height:1.2; margin-bottom:6px; display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .card-desc { font-family:var(--font-body); font-weight:300; font-size:13px; color:var(--text-mid); line-height:1.55; margin-bottom:14px; }
+    .card-foot { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .card-price { font-family:var(--font-display); font-weight:600; font-size:20px; color:var(--text-dark); }
+    .btn-add {
+      font-family:var(--font-body); font-weight:500; font-size:11px;
+      letter-spacing:.09em; text-transform:uppercase;
+      color:#fff; background:var(--chocolate); border:1.5px solid transparent;
+      border-radius:var(--r-full); padding:8.5px 18px; cursor:pointer;
+      transition:background .3s var(--ease), color .25s ease, border-color .25s ease; white-space:nowrap;
+    }
+    .btn-add:hover { background:var(--chocolate-dark); }
+    .btn-add.in { background:transparent; color:var(--chocolate); border-color:rgba(196,137,122,.45); }
+    .btn-add.pop { animation:pulse .3s ease; }
+
+    /* ── OVERLAY ─────────────────────────────────────────────── */
+    #overlay {
+      position:fixed; inset:0;
+      background:rgba(44,24,16,.3);
+      backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+      z-index:200; opacity:0; pointer-events:none;
+      transition:opacity .38s ease;
+    }
+    #overlay.on { opacity:1; pointer-events:all; }
+
+    /* ── CARRITO LATERAL ─────────────────────────────────────── */
+    #carrito {
+      position:fixed; top:0; right:0; bottom:0;
+      width:min(440px,100vw);
+      background:var(--bg-cart);
+      z-index:201;
+      transform:translateX(110%);
+      transition:transform .42s var(--ease);
+      display:flex; flex-direction:column;
+      box-shadow:var(--sh-cart);
+    }
+    #carrito::before {
+      content:'';
+      position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(to right, var(--primary), var(--accent));
+      z-index:1;
+    }
+    #carrito.open { transform:translateX(0); }
+
+    /* Header carrito */
+    .ch {
+      flex-shrink:0;
+      padding:30px 28px 20px;
+      border-bottom:1px solid rgba(232,197,184,.25);
+    }
+    .ch-row { display:flex; align-items:flex-start; justify-content:space-between; }
+    .ch-title { font-family:var(--font-display); font-weight:300; font-size:30px; color:var(--text-dark); line-height:1.05; letter-spacing:.01em; }
+    .ch-count { font-family:var(--font-body); font-weight:300; font-size:12px; color:var(--text-light); margin-top:5px; letter-spacing:.06em; }
+    .ch-close {
+      background:none; border:none; cursor:pointer; color:var(--text-light);
+      padding:6px; margin-top:4px; border-radius:50%;
+      transition:color .2s ease, transform .3s ease, background .2s ease;
+    }
+    .ch-close:hover { color:var(--text-dark); transform:rotate(90deg); background:rgba(232,197,184,.2); }
+
+    /* Items scroll */
+    .ci-list {
+      flex:1; overflow-y:auto; padding:0 28px;
+      overscroll-behavior:contain;
+    }
+    .ci-list::-webkit-scrollbar { width:3px; }
+    .ci-list::-webkit-scrollbar-track { background:transparent; }
+    .ci-list::-webkit-scrollbar-thumb { background:rgba(232,197,184,.5); border-radius:2px; }
+
+    /* Estado vacío */
+    .cart-empty {
+      display:flex; flex-direction:column; align-items:center;
+      justify-content:center; gap:18px; min-height:340px; text-align:center;
+      padding:40px 16px;
+    }
+    .cart-empty-duck { opacity:.32; }
+    .cart-empty-title { font-family:var(--font-display); font-weight:300; font-style:italic; font-size:23px; color:var(--text-mid); line-height:1.2; }
+    .cart-empty-sub   { font-family:var(--font-body); font-weight:300; font-size:13px; color:var(--text-light); line-height:1.6; }
+
+    /* Item */
+    .ci {
+      display:flex; gap:14px; align-items:flex-start;
+      padding:18px 0;
+      animation:slideIn .28s ease forwards;
+    }
+    .ci + .ci { border-top:1px solid rgba(232,197,184,.2); }
+    .ci:first-child { padding-top:22px; }
+
+    .ci-thumb {
+      width:76px; height:76px; border-radius:14px; overflow:hidden;
+      background:linear-gradient(150deg,var(--pink-pastel),var(--primary));
+      flex-shrink:0;
+    }
+    .ci-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .ci-info { display:flex; flex-direction:column; gap:2px; min-width:0; flex:1; }
+    .ci-name {
+      font-family:var(--font-display); font-weight:600; font-size:16px;
+      color:var(--text-dark); line-height:1.2;
+      display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .ci-unit { font-family:var(--font-body); font-weight:300; font-size:11px; color:var(--text-light); margin-top:2px; }
+    .ci-row  { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
+    .ci-qty  { display:flex; align-items:center; gap:8px; }
+    .qty-btn {
+      width:28px; height:28px; border-radius:50%;
+      border:1.5px solid rgba(196,137,122,.32);
+      background:transparent; color:var(--text-mid);
+      font-size:16px; cursor:pointer;
+      display:grid; place-items:center; line-height:1;
+      transition:background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .qty-btn:hover { background:var(--primary); border-color:var(--primary); color:var(--text-dark); }
+    .qty-n { font-family:var(--font-body); font-weight:400; font-size:14px; color:var(--text-dark); min-width:20px; text-align:center; }
+    .ci-line-total { font-family:var(--font-display); font-weight:600; font-size:17px; color:var(--accent); }
+    .ci-del {
+      background:none; border:none; cursor:pointer;
+      color:rgba(184,150,144,.4); padding:4px; line-height:1; flex-shrink:0; margin-top:2px;
+      transition:color .2s ease, transform .2s ease;
+    }
+    .ci-del:hover { color:var(--accent); transform:scale(1.15); }
+
+    /* Footer carrito */
+    .cf {
+      flex-shrink:0; padding:18px 28px 32px;
+      border-top:1px solid rgba(232,197,184,.22);
+      display:flex; flex-direction:column; gap:14px;
+    }
+
+    /* Barra envío */
+    .ship-wrap { display:flex; flex-direction:column; gap:5px; }
+    .ship-label { font-family:var(--font-body); font-weight:300; font-size:12px; color:var(--text-mid); }
+    .ship-bar   { height:3px; background:rgba(232,197,184,.28); border-radius:2px; overflow:hidden; }
+    .ship-fill  { height:100%; background:linear-gradient(to right,var(--primary),var(--accent)); border-radius:2px; transition:width .55s ease; }
+    .ship-note  { font-family:var(--font-body); font-weight:300; font-size:11px; color:var(--text-light); }
+    .ship-free  { font-family:var(--font-body); font-weight:400; font-size:12px; color:#3a9e6a; letter-spacing:.02em; }
+
+    /* Totales */
+    .totals { display:flex; flex-direction:column; gap:7px; }
+    .tot-row { display:flex; justify-content:space-between; align-items:baseline; }
+    .tot-label { font-family:var(--font-body); font-weight:300; font-size:13px; color:var(--text-mid); }
+    .tot-val   { font-family:var(--font-body); font-weight:400; font-size:13px; color:var(--text-mid); }
+    .tot-sep   { height:1px; background:rgba(232,197,184,.28); margin:4px 0; }
+    .tot-row.main .tot-label { font-family:var(--font-display); font-weight:400; font-size:20px; color:var(--text-dark); }
+    .tot-row.main .tot-val   { font-family:var(--font-display); font-weight:600; font-size:24px; color:var(--text-dark); }
+
+    .cf-note { font-family:var(--font-body); font-weight:300; font-size:12px; color:var(--text-light); text-align:center; font-style:italic; letter-spacing:.03em; }
+
+    .btn-wsp {
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      width:100%; background:var(--whatsapp); color:#fff;
+      border:none; border-radius:var(--r-full); padding:16px 20px;
+      font-family:var(--font-body); font-weight:500; font-size:13px; letter-spacing:.05em;
+      cursor:pointer; transition:background .25s ease, transform .2s ease, box-shadow .25s ease;
+    }
+    .btn-wsp:hover { background:#20bb5a; transform:translateY(-1px); box-shadow:0 8px 20px rgba(37,211,102,.28); }
+    .btn-wsp:disabled { background:rgba(37,211,102,.28); cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn-wsp svg { flex-shrink:0; }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer { background:var(--chocolate); padding:64px clamp(20px,5%,72px) 0; }
+    .fg { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:52px; padding-bottom:52px; }
+    .f-logo    { font-family:var(--font-display); font-weight:600; font-size:32px; color:rgba(253,246,243,.95); letter-spacing:.03em; line-height:1; }
+    .f-tagline { font-family:var(--font-body); font-weight:300; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:rgba(253,246,243,.4); margin-top:8px; margin-bottom:20px; }
+    .f-col-h   { font-family:var(--font-body); font-weight:500; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(253,246,243,.32); margin-bottom:16px; }
+    .f-links   { display:flex; flex-direction:column; gap:10px; }
+    .f-links a { font-family:var(--font-body); font-weight:300; font-size:13.5px; color:rgba(253,246,243,.6); text-decoration:none; transition:color .2s ease; }
+    .f-links a:hover { color:rgba(253,246,243,1); }
+    .f-social { display:flex; gap:16px; }
+    .f-social a { color:rgba(253,246,243,.6); transition:color .2s ease, transform .2s ease; display:flex; }
+    .f-social a:hover { color:rgba(253,246,243,1); transform:scale(1.15); }
+    .f-social svg { width:22px; height:22px; }
+    .f-bottom { border-top:1px solid rgba(253,246,243,.1); padding:24px 0; text-align:center; font-family:var(--font-body); font-weight:300; font-size:11px; color:rgba(253,246,243,.28); letter-spacing:.04em; }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media(max-width:960px) {
+      #hero { grid-template-columns:1fr; min-height:auto; }
+      .hero-visual { height:52vw; min-height:280px; max-height:420px; order:-1; }
+      .logo-tag { display:none; }
+      nav { display:none; }
+      .fg { grid-template-columns:1fr 1fr; gap:36px; }
+    }
+    @media(max-width:600px) {
+      :root { --hh:56px; }
+      .hero-text { padding:40px 20px 48px; gap:20px; }
+      .grid { grid-template-columns:repeat(2,1fr); gap:12px; }
+      .card-body { padding:12px 12px 14px; }
+      .card-desc { display:none; }
+      .fg { grid-template-columns:1fr; gap:28px; }
+      #carrito { width:100vw; }
+      .ch { padding:22px 20px 16px; }
+      .ci-list { padding:0 20px; }
+      .cf { padding:16px 20px 28px; }
+    }
+    @media(max-width:360px) {
+      .grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ════════════════════════════════════════════════ -->
+<header>
+  <a href="#" class="logo-wrap">
+    <span class="logo-name">Katemi</span>
+    <span class="logo-tag">Maquillaje que realza tu esencia</span>
+  </a>
+  <nav>
+    <a href="#">Inicio</a>
+    <a href="#catalogo">Catálogo</a>
+    <a href="#">Nosotras</a>
+  </nav>
+  <button class="cart-btn" id="cart-btn" aria-label="Ver selección">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+    <span class="cart-badge" id="badge"></span>
+  </button>
+</header>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════ -->
+<section id="hero">
+  <img class="hero-bg-img" src="./Imagenes/Fondo%20Principal.png" alt="" aria-hidden="true">
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-text">
+    <span class="hero-eyebrow">Nueva colección</span>
+    <h1 class="hero-h1">Realza<br>tu <em>esencia.</em></h1>
+    <p class="hero-p">Cada producto que elegimos, lo elegimos pensando en ti.</p>
+    <div class="hero-actions">
+      <a href="#catalogo" class="btn-pill">Explorar colección</a>
+      <span class="hero-note">✦ Envío gratis sobre $40.000</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-blob"></div>
+    <span class="sparkle sp1">✦</span>
+    <span class="sparkle sp2">✦</span>
+    <span class="sparkle sp3">✦</span>
+    <span class="sparkle sp4">✦</span>
+    <span class="sparkle sp5">✦</span>
+    <div class="duck-wrap">
+      <svg width="260" height="260" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bg1" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#FFE55A"/><stop offset="100%" stop-color="#F0C830"/></radialGradient>
+          <radialGradient id="wg1" cx="50%" cy="30%" r="60%"><stop offset="0%" stop-color="#E8C830"/><stop offset="100%" stop-color="#D4A820"/></radialGradient>
+        </defs>
+        <ellipse cx="140" cy="168" rx="88" ry="72" fill="url(#bg1)"/>
+        <path d="M80 175 Q68 150 82 132 Q106 118 124 138 Q112 168 80 175Z" fill="url(#wg1)" opacity=".9"/>
+        <ellipse cx="168" cy="108" rx="52" ry="50" fill="url(#bg1)"/>
+        <path d="M216 108 Q232 104 234 112 Q232 120 216 116 Q210 112 216 108Z" fill="#F0A050" stroke="#E09040" stroke-width="1"/>
+        <ellipse cx="152" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
+        <ellipse cx="188" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
+        <ellipse cx="175" cy="100" rx="16" ry="17" fill="white"/>
+        <ellipse cx="177" cy="102" rx="9" ry="10" fill="#1A0A06"/>
+        <circle cx="181" cy="97" r="3.5" fill="white"/>
+        <path d="M164 84 Q170 72 184 76" stroke="#2C1810" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M166 86 Q168 78 170 76" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M172 83 Q176 74 178 73" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M179 84 Q183 77 186 77" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M116 232 Q110 242 104 244 Q108 246 116 244 Q122 246 128 244 Q122 242 116 232Z" fill="#F0A050"/>
+        <path d="M164 236 Q158 246 152 248 Q156 250 164 248 Q170 250 176 248 Q170 246 164 236Z" fill="#F0A050"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CATÁLOGO ══════════════════════════════════════════════ -->
+<section id="catalogo">
+  <div class="sec-head">
+    <h2 class="sec-title">Nuestra <em>colección</em></h2>
+    <p class="sec-sub">Lo seleccionamos especialmente para ti.</p>
+  </div>
+  <div class="filtros" id="filtros">
+    <button class="f-btn active" data-cat="todos">Todos</button>
+    <button class="f-btn" data-cat="labios">Labios</button>
+    <button class="f-btn" data-cat="ojos">Ojos</button>
+    <button class="f-btn" data-cat="rostro">Rostro</button>
+    <button class="f-btn" data-cat="accesorios">Accesorios</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <div class="fg">
+    <div>
+      <div class="f-logo">Katemi</div>
+      <div class="f-tagline">Maquillaje que realza tu esencia</div>
+      <svg width="48" height="48" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><radialGradient id="bg2" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#FFE55A"/><stop offset="100%" stop-color="#F0C830"/></radialGradient></defs>
+        <ellipse cx="140" cy="168" rx="88" ry="72" fill="url(#bg2)"/>
+        <path d="M80 175 Q68 150 82 132 Q106 118 124 138 Q112 168 80 175Z" fill="#D4A820" opacity=".9"/>
+        <ellipse cx="168" cy="108" rx="52" ry="50" fill="url(#bg2)"/>
+        <path d="M216 108 Q232 104 234 112 Q232 120 216 116 Q210 112 216 108Z" fill="#F0A050"/>
+        <ellipse cx="152" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
+        <ellipse cx="188" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
+        <ellipse cx="175" cy="100" rx="16" ry="17" fill="white"/>
+        <ellipse cx="177" cy="102" rx="9" ry="10" fill="#1A0A06"/>
+        <circle cx="181" cy="97" r="3.5" fill="white"/>
+        <path d="M166 86 Q168 78 170 76" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M172 83 Q176 74 178 73" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M179 84 Q183 77 186 77" stroke="#2C1810" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div>
+      <div class="f-col-h">Navegar</div>
+      <div class="f-links">
+        <a href="#">Inicio</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#">Nosotras</a>
+      </div>
+    </div>
+    <div>
+      <div class="f-col-h">Encuéntranos</div>
+      <div class="f-social">
+        <a href="#" title="WhatsApp" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        </a>
+        <a href="#" title="Instagram" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="#" title="TikTok" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.73a4.85 4.85 0 0 1-1.01-.04z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="f-bottom">© 2025 Katemi · Hecho con amor</div>
+</footer>
+
+<!-- ═══ OVERLAY + CARRITO ════════════════════════════════════ -->
+<div id="overlay" onclick="closeCart()"></div>
+
+<aside id="carrito" aria-label="Tu selección">
+  <div class="ch">
+    <div class="ch-row">
+      <div>
+        <div class="ch-title">Tu selección</div>
+        <div class="ch-count" id="ch-count"></div>
+      </div>
+      <button class="ch-close" onclick="closeCart()" aria-label="Cerrar carrito">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="ci-list" id="ci-list"></div>
+  <div class="cf" id="cf"></div>
+</aside>
+
+<!-- ═══ JS ════════════════════════════════════════════════════ -->
+<script>
+const WHATSAPP_NUMBER = '56912345678';
+const ENVIO_GRATIS    = 40000;
+
+const productos = [
+  { id:1,  nombre:'Labial Terciopelo Rosa Nude',    categoria:'labios',     precio:12990, desc:'Acabado mate aterciopelado de larga duración.',       img:'ChatGPT Image 3 jun 2026, 23_49_37.png' },
+  { id:2,  nombre:'Gloss Efecto Volumen Coral',     categoria:'labios',     precio:9990,  desc:'Brillo jugoso que realza el volumen natural.',         img:'ChatGPT Image 4 jun 2026, 00_23_51.png' },
+  { id:3,  nombre:'Lip Liner Tono Madera',          categoria:'labios',     precio:7990,  desc:'Delineador cremoso para un acabado perfecto.',         img:'ChatGPT Image 3 jun 2026, 21_00_46.png' },
+  { id:4,  nombre:'Tinte de Labios Berry',          categoria:'labios',     precio:10990, desc:'Color suave y natural de larga duración.',             img:'ChatGPT Image 3 jun 2026, 20_58_15.png' },
+  { id:5,  nombre:'Bálsamo Nutritivo Cherry',       categoria:'labios',     precio:6990,  desc:'Hidratación y color en un solo paso.',                 img:'ChatGPT Image 4 jun 2026, 00_22_57.png' },
+  { id:6,  nombre:'Paleta Sombras Rosé Garden',     categoria:'ojos',       precio:24990, desc:'12 tonos ahumados y shimmer en rosas y cobres.',       img:'ChatGPT Image 3 jun 2026, 21_15_55.png' },
+  { id:7,  nombre:'Máscara Efecto Pestañas XL',     categoria:'ojos',       precio:14990, desc:'Volumen y curvatura desde la primera capa.',           img:null },
+  { id:8,  nombre:'Delineador Café Intenso',        categoria:'ojos',       precio:9990,  desc:'Punta ultrafina para trazos precisos.',                img:null },
+  { id:9,  nombre:'Sombra Individual Dorado',       categoria:'ojos',       precio:7990,  desc:'Shimmer dorado para iluminar la mirada.',              img:null },
+  { id:10, nombre:'Corrector Ojeras Beige',         categoria:'ojos',       precio:11990, desc:'Ilumina y cubre en un solo producto.',                 img:'ChatGPT Image 4 jun 2026, 00_30_06.png' },
+  { id:11, nombre:'Base Serum Tono Porcelana',      categoria:'rostro',     precio:29990, desc:'Cobertura media con acabado luminoso natural.',        img:'ChatGPT Image 4 jun 2026, 12_38_11 a.m..png' },
+  { id:12, nombre:'Blush Polvo Pétalo Rosa',        categoria:'rostro',     precio:16990, desc:'Color suave que aporta un rubor saludable.',           img:'7786e1d7-238f-4f4d-9b84-3d049e546327.png' },
+  { id:13, nombre:'Iluminador Champagne Glow',      categoria:'rostro',     precio:18990, desc:'Destellos dorados suaves para pómulos.',              img:null },
+  { id:14, nombre:'Polvo Fijador Translúcido',      categoria:'rostro',     precio:13990, desc:'Fija el maquillaje sin efecto máscara.',               img:'ChatGPT Image 4 jun 2026, 12_41_19 a.m..png' },
+  { id:15, nombre:'Contorno Tono Caramelo',         categoria:'rostro',     precio:15990, desc:'Define y modela el rostro sutilmente.',                img:'ChatGPT Image 4 jun 2026, 00_31_49.png' },
+  { id:16, nombre:'Set Brochas Premium × 5',        categoria:'accesorios', precio:34990, desc:'Fibras suaves para una aplicación perfecta.',          img:null },
+  { id:17, nombre:'Esponja Aplicadora Beauty',      categoria:'accesorios', precio:8990,  desc:'Acabado airbrushed sin marcas ni rayas.',              img:null },
+  { id:18, nombre:'Organizador Acrílico Mini',      categoria:'accesorios', precio:19990, desc:'Mantén tu vanity ordenada con estilo.',                img:null },
+  { id:19, nombre:'Espejo de Mano Dorado',          categoria:'accesorios', precio:12990, desc:'Compacto con aumento y diseño elegante.',              img:null },
+  { id:20, nombre:'Sachet Maquillaje Rosa',         categoria:'accesorios', precio:9990,  desc:'Guarda tus esenciales con estilo.',                    img:null },
+];
+
+function imgSrc(fn) {
+  return './Imagenes%20de%20productos/' + encodeURIComponent(fn);
+}
+
+function fmt(n) {
+  return '$' + n.toLocaleString('es-CL');
+}
+
+/* ── Estado ──────────────────────────────────────────────────── */
+let carrito = [];
+let catActiva = 'todos';
+let cartIsOpen = false;
+
+/* ── Carrito ops ─────────────────────────────────────────────── */
+function agregar(id) {
+  const p = productos.find(x => x.id === id);
+  if (!p) return;
+  const ex = carrito.find(x => x.id === id);
+  if (ex) ex.qty++;
+  else carrito.push({ ...p, qty: 1 });
+  sync();
+}
+
+function quitar(id) {
+  carrito = carrito.filter(x => x.id !== id);
+  sync();
+  refreshCardBtns();
+}
+
+function cambiarQty(id, d) {
+  const item = carrito.find(x => x.id === id);
+  if (!item) return;
+  item.qty += d;
+  if (item.qty <= 0) { quitar(id); return; }
+  sync();
+}
+
+function total() { return carrito.reduce((s, i) => s + i.precio * i.qty, 0); }
+function nItems() { return carrito.reduce((s, i) => s + i.qty, 0); }
+
+function sync() { renderCarrito(); updateBadge(); }
+
+/* ── Badge ───────────────────────────────────────────────────── */
+function updateBadge() {
+  const el = document.getElementById('badge');
+  const n = nItems();
+  el.textContent = n || '';
+  el.classList.toggle('on', n > 0);
+}
+
+/* ── SVGs reutilizables ──────────────────────────────────────── */
+const DUCK_EMPTY = `<svg class="cart-empty-duck" width="96" height="96" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><radialGradient id="bgE" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#FFE55A"/><stop offset="100%" stop-color="#F0C830"/></radialGradient></defs>
+  <ellipse cx="140" cy="168" rx="88" ry="72" fill="url(#bgE)"/>
+  <path d="M80 175 Q68 150 82 132 Q106 118 124 138 Q112 168 80 175Z" fill="#D4A820" opacity=".9"/>
+  <ellipse cx="168" cy="108" rx="52" ry="50" fill="url(#bgE)"/>
+  <path d="M216 108 Q232 104 234 112 Q232 120 216 116 Q210 112 216 108Z" fill="#F0A050"/>
+  <ellipse cx="152" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
+  <ellipse cx="188" cy="118" rx="11" ry="8" fill="rgba(242,167,150,.6)"/>
+  <ellipse cx="175" cy="100" rx="16" ry="17" fill="white"/>
+  <ellipse cx="177" cy="106" rx="9" ry="6" fill="#1A0A06"/>
+  <circle cx="181" cy="103" r="2.5" fill="white"/>
+  <path d="M164 84 Q172 76 182 80" stroke="#2C1810" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M168 86 Q170 80 172 79" stroke="#2C1810" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M174 84 Q177 78 179 78" stroke="#2C1810" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+</svg>`;
+
+const WSP_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>`;
+
+const DEL_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+/* ── Render carrito ──────────────────────────────────────────── */
+function renderCarrito() {
+  const list    = document.getElementById('ci-list');
+  const foot    = document.getElementById('cf');
+  const countEl = document.getElementById('ch-count');
+  const n       = nItems();
+
+  countEl.textContent = n === 0 ? '' : n === 1 ? '1 producto' : `${n} productos`;
+
+  if (carrito.length === 0) {
+    list.innerHTML = `
+      <div class="cart-empty">
+        ${DUCK_EMPTY}
+        <div class="cart-empty-title">Tu selección está vacía</div>
+        <div class="cart-empty-sub">Encontrarás algo que te encantará.</div>
+      </div>`;
+    foot.innerHTML = `<button class="btn-wsp" disabled>${WSP_ICON} Continuar por WhatsApp</button>`;
+    return;
+  }
+
+  list.innerHTML = carrito.map(item => `
+    <div class="ci">
+      <div class="ci-thumb">
+        ${item.img ? `<img src="${imgSrc(item.img)}" alt="${item.nombre}" loading="lazy" onerror="this.style.display='none'">` : ''}
+      </div>
+      <div class="ci-info">
+        <span class="ci-name">${item.nombre}</span>
+        <span class="ci-unit">${fmt(item.precio)} c/u</span>
+        <div class="ci-row">
+          <div class="ci-qty">
+            <button class="qty-btn" onclick="cambiarQty(${item.id},-1)" aria-label="Menos">−</button>
+            <span class="qty-n">${item.qty}</span>
+            <button class="qty-btn" onclick="cambiarQty(${item.id},1)" aria-label="Más">+</button>
+          </div>
+          <span class="ci-line-total">${fmt(item.precio * item.qty)}</span>
+        </div>
+      </div>
+      <button class="ci-del" onclick="quitar(${item.id})" aria-label="Quitar producto">${DEL_ICON}</button>
+    </div>
+  `).join('');
+
+  const sub   = total();
+  const libre = sub >= ENVIO_GRATIS;
+  const pct   = Math.min(100, Math.round(sub / ENVIO_GRATIS * 100));
+  const falta = ENVIO_GRATIS - sub;
+
+  const shipHtml = libre
+    ? `<div class="ship-free">✓ Envío gratis incluido</div>`
+    : `<div class="ship-wrap">
+         <div class="ship-label">Envío gratis al llegar a ${fmt(ENVIO_GRATIS)}</div>
+         <div class="ship-bar"><div class="ship-fill" style="width:${pct}%"></div></div>
+         <div class="ship-note">Te faltan ${fmt(falta)} para envío gratis</div>
+       </div>`;
+
+  foot.innerHTML = `
+    ${shipHtml}
+    <div class="totals">
+      <div class="tot-row">
+        <span class="tot-label">Subtotal</span>
+        <span class="tot-val">${fmt(sub)}</span>
+      </div>
+      <div class="tot-row">
+        <span class="tot-label">Envío</span>
+        <span class="tot-val" ${libre ? 'style="color:#3a9e6a"' : ''}>${libre ? 'Gratis ✓' : 'A coordinar'}</span>
+      </div>
+      <div class="tot-sep"></div>
+      <div class="tot-row main">
+        <span class="tot-label">Total</span>
+        <span class="tot-val">${fmt(sub)}</span>
+      </div>
+    </div>
+    <p class="cf-note">Elegimos cada producto pensando en ti</p>
+    <button class="btn-wsp" onclick="abrirWsp()">${WSP_ICON} Continuar por WhatsApp</button>`;
+}
+
+/* ── Cart open/close ─────────────────────────────────────────── */
+function openCart() {
+  cartIsOpen = true;
+  document.getElementById('carrito').classList.add('open');
+  document.getElementById('overlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  cartIsOpen = false;
+  document.getElementById('carrito').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+document.getElementById('cart-btn').addEventListener('click', () => cartIsOpen ? closeCart() : openCart());
+
+/* ── WhatsApp ────────────────────────────────────────────────── */
+function abrirWsp() {
+  const lines = carrito.map(i => `• ${i.nombre} × ${i.qty} — ${fmt(i.precio * i.qty)}`).join('\n');
+  const msg = encodeURIComponent(
+    `Hola Katemi! Me gustaría hacer el siguiente pedido:\n\n*Mi selección:*\n\n${lines}\n\n*Total estimado: ${fmt(total())}*\n\n¿Está disponible? ¡Gracias!`
+  );
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  closeCart();
+}
+
+/* ── Render grid ─────────────────────────────────────────────── */
+function refreshCardBtns() {
+  document.querySelectorAll('.card[data-id]').forEach(card => {
+    const id   = +card.dataset.id;
+    const btn  = card.querySelector('.btn-add');
+    const inC  = carrito.some(x => x.id === id);
+    card.classList.toggle('in-cart', inC);
+    if (btn && !btn._anim) {
+      btn.classList.toggle('in', inC);
+      btn.textContent = inC ? 'En tu selección ✓' : 'Agregar';
+    }
+  });
+}
+
+function handleAdd(id, btn) {
+  agregar(id);
+  const card = btn.closest('.card');
+  if (card) card.classList.add('in-cart');
+  btn.textContent = '¡Agregado!';
+  btn._anim = true;
+  btn.classList.add('pop', 'in');
+  setTimeout(() => {
+    btn._anim = false;
+    btn.textContent = 'En tu selección ✓';
+    btn.classList.remove('pop');
+  }, 1500);
+}
+
+function renderGrid(cat) {
+  const grid = document.getElementById('grid');
+  const list = cat === 'todos' ? productos : productos.filter(p => p.categoria === cat);
+  grid.innerHTML = list.map((p, i) => {
+    const inC = carrito.some(x => x.id === p.id);
+    return `
+    <article class="card${inC ? ' in-cart' : ''}" data-id="${p.id}" style="animation-delay:${i * 0.04}s">
+      <div class="card-img">
+        ${p.img ? `<img src="${imgSrc(p.img)}" alt="${p.nombre}" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <div class="card-in-badge">En selección ✓</div>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${p.categoria}</div>
+        <div class="card-name">${p.nombre}</div>
+        <p class="card-desc">${p.desc}</p>
+        <div class="card-foot">
+          <span class="card-price">${fmt(p.precio)}</span>
+          <button class="btn-add ${inC ? 'in' : ''}" onclick="handleAdd(${p.id},this)">
+            ${inC ? 'En tu selección ✓' : 'Agregar'}
+          </button>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+/* ── Filtros ─────────────────────────────────────────────────── */
+document.getElementById('filtros').addEventListener('click', e => {
+  const btn = e.target.closest('.f-btn');
+  if (!btn) return;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  catActiva = btn.dataset.cat;
+  renderGrid(catActiva);
+});
+
+/* ── Init ────────────────────────────────────────────────────── */
+renderGrid('todos');
+renderCarrito();
+</script>
+</body>
+</html>
