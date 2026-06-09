@@ -771,6 +771,10 @@ function handleAdd(id, btn) {
   }, 1500);
 }
 
+function waLink(nombre) {
+  return 'https://wa.me/56922201517?text=' + encodeURIComponent('Hola, me interesa este producto: ' + nombre);
+}
+
 function renderGrid(cat) {
   const grid = document.getElementById('grid');
   const list = cat === 'todos' ? productos : productos.filter(p => p.categoria === cat);
@@ -788,9 +792,7 @@ function renderGrid(cat) {
         <p class="card-desc">${p.desc}</p>
         <div class="card-foot">
           <span class="card-price">${fmt(p.precio)}</span>
-          <button class="btn-add ${inC ? 'in' : ''}" onclick="handleAdd(${p.id},this)">
-            ${inC ? 'En tu selección ✓' : 'Agregar'}
-          </button>
+          <a class="btn-add" href="${waLink(p.nombre)}" target="_blank" rel="noopener">Agregar</a>
         </div>
       </div>
     </article>`;
